@@ -7,16 +7,20 @@
 #include<string>
 using namespace std;
 
-
+//global variables I will use later in various modules
 const int NUMQ = 20;
-const double PASSPERC = 70;
+const double PASSPERC = 70;//70% is the minimum passing grade
 
+//function prototypes
 
 
 void getAnswers(const string& filename, char ANSWERS[]);
+//loads data from a file
 int gradeExam(const char CORRECT[], const char STUA[], int MISSQ[], char MISSA[][2]);
+//compares students against the answer key
 void writeReport(const int MISSQ[], int NUMMISS, const char MISSA[][2]);
-
+//formats and outputs the response 
+//checks if student passes or fails from percentage 
 
 
 
@@ -29,16 +33,16 @@ void writeReport(const int MISSQ[], int NUMMISS, const char MISSA[][2]);
 int main()
 {
    
-	char CORRECT[NUMQ];
-	char STUA[NUMQ];
-	int MISSQ[NUMQ];
-	char MISSA[NUMQ][2];
-
-	getAnswers("correctAnswers.txt", CORRECT);
+	char CORRECT[NUMQ];//the answer key from the file
+	char STUA[NUMQ];//student response from the file
+	int MISSQ[NUMQ];//the question number that is incorrect
+	char MISSA[NUMQ][2];//pair of answers
+	//loads the file and accesses the appropiate module
+	getAnswers("CorrectAnswers.txt", CORRECT);
 	getAnswers("StudentAnswers.txt", STUA);
-
+	//the grader of the exam 
 	int WRONGA = gradeExam(CORRECT, STUA, MISSQ, MISSA);
-
+	//the output of the report
 	writeReport(MISSQ, WRONGA, MISSA);
 
 	return 0;
@@ -53,7 +57,7 @@ void getAnswers(const string& filename, char ANSWERS[]) {
 
 	ifstream File(filename);
 
-
+	//file check if it opened correctly
 	if (!File) {
 
 		cout << "File Error\n";
@@ -73,7 +77,7 @@ void getAnswers(const string& filename, char ANSWERS[]) {
 		
 
 
-
+		
 
 	}
 
@@ -94,7 +98,7 @@ int gradeExam(const char CORRECT[], const char STUA[], int MISSQ[], char MISSA[]
 
 
 	int START = 0;//didn't want to choose a name too similar, starts the number of incorrect at 0
-
+	//compares each answers
 	for (int f = 0; f < NUMQ; f++) {
 
 		if (CORRECT[f] != STUA[f]) {
@@ -104,7 +108,7 @@ int gradeExam(const char CORRECT[], const char STUA[], int MISSQ[], char MISSA[]
 
 
 			MISSA[START][0] = CORRECT[f];
-			MISSA[START][0] = STUA[f];
+			MISSA[START][1] = STUA[f];
 
 			START++;
 		}
@@ -125,7 +129,7 @@ int gradeExam(const char CORRECT[], const char STUA[], int MISSQ[], char MISSA[]
 }
 
 
-
+//the output module
 void writeReport(const int MISSQ[], int NUMMISS, const char MISSA[][2]) {
 
 
@@ -143,10 +147,9 @@ void writeReport(const int MISSQ[], int NUMMISS, const char MISSA[][2]) {
 		cout << "Question\tCorrect Answer\tYour Answer\n";
 
 		for (int i = 0; i < NUMMISS; i++) {
-
-			cout << setw(4) << MISSQ[i] << "\t\t";
-			cout << setw(8) << MISSA[i][0] << "\t\t";
-			cout << setw(8) << MISSA[i][1] << endl;
+			//generates the coreection/grading
+			cout << setw(4) << MISSQ[i] << "\t\t"<< setw(8) << MISSA[i][0] << "\t\t" << setw(8) << MISSA[i][1] << endl;
+			 
 
 
 		}
@@ -168,7 +171,7 @@ void writeReport(const int MISSQ[], int NUMMISS, const char MISSA[][2]) {
 	if (PERCENTAGE >= PASSPERC) {
 
 
-		cout << "Pass/n";
+		cout << "Pass";
 
 
 
