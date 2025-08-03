@@ -2,19 +2,199 @@
 //
 
 #include <iostream>
+#include<fstream>
+#include<iomanip>
+#include<string>
+using namespace std;
+
+
+const int NUMQ = 20;
+const double PASSPERC = 70;
+
+
+
+void getAnswers(const string& filename, char ANSWERS[]);
+int gradeExam(const char CORRECT[], const char STUA[], int MISSQ[], char MISSA[][2]);
+void writeReport(const int MISSQ[], int NUMMISS, const char MISSA[][2]);
+
+
+
+
+
+
+
+
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+   
+	char CORRECT[NUMQ];
+	char STUA[NUMQ];
+	int MISSQ[NUMQ];
+	char MISSA[NUMQ][2];
+
+	getAnswers("correctAnswers.txt", CORRECT);
+	getAnswers("StudentAnswers.txt", STUA);
+
+	int WRONGA = gradeExam(CORRECT, STUA, MISSQ, MISSA);
+
+	writeReport(MISSQ, WRONGA, MISSA);
+
+	return 0;
+
+
+
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+
+void getAnswers(const string& filename, char ANSWERS[]) {
+
+	ifstream File(filename);
+
+
+	if (!File) {
+
+		cout << "File Error\n";
+			exit(1);
+
+
+
+
+
+
+	}
+
+	for (int i = 0; i < NUMQ; i++) {
+
+
+		File >> ANSWERS[i];
+		
+
+
+
+
+	}
+
+
+	File.close();//closes file to not cause issues
+
+
+
+
+
+
+
+}
+
+
+
+int gradeExam(const char CORRECT[], const char STUA[], int MISSQ[], char MISSA[][2]) {
+
+
+	int START = 0;//didn't want to choose a name too similar, starts the number of incorrect at 0
+
+	for (int f = 0; f < NUMQ; f++) {
+
+		if (CORRECT[f] != STUA[f]) {
+
+
+			MISSQ[START] = f + 1;//MAKES QUESTION START AT 1
+
+
+			MISSA[START][0] = CORRECT[f];
+			MISSA[START][0] = STUA[f];
+
+			START++;
+		}
+
+
+
+
+
+	}
+
+
+
+	return START;
+
+
+
+
+}
+
+
+
+void writeReport(const int MISSQ[], int NUMMISS, const char MISSA[][2]) {
+
+
+
+
+	double PERCENTAGE = (NUMQ - NUMMISS) * 100 / NUMQ;
+
+
+	cout << "Exam Report\n\n";//for formatting at the end
+	cout << "# of Missed Questions:\t" << NUMMISS << endl;
+
+	if (NUMMISS > 0) {
+
+		cout << "Missed Questions and Correct Answers:\n\n";
+		cout << "Question\tCorrect Answer\tYour Answer\n";
+
+		for (int i = 0; i < NUMMISS; i++) {
+
+			cout << setw(4) << MISSQ[i] << "\t\t";
+			cout << setw(8) << MISSA[i][0] << "\t\t";
+			cout << setw(8) << MISSA[i][1] << endl;
+
+
+		}
+
+
+
+	}
+
+	else{
+		cout << "No Answers Incorrect";
+
+	}
+
+
+	cout << fixed << setprecision(2);
+	cout << "\nTest Scores:\t" << PERCENTAGE << "%\n";
+
+
+	if (PERCENTAGE >= PASSPERC) {
+
+
+		cout << "Pass/n";
+
+
+
+	}
+
+	else {
+
+		cout << "Fail";
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
