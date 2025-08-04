@@ -13,9 +13,6 @@ using namespace std;
 //functional prototyprs 
 
 
-
-
-
 void getTeams(const string& FILE, vector<string>& TEAMA);
 //Reads team names from a file and adds to vector
 //outputs all name from file
@@ -80,7 +77,7 @@ int main()
         }
         //validating team name
         if (VALID) {
-
+            //this is output of program
             int WIN = findWinner(input, WINNER);//module call
             cout << "The " << input << " won the World Series " << WIN << " times\n\n";
 
